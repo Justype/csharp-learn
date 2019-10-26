@@ -54,11 +54,7 @@ C#主要来说是类型安全的
 ### 平台支持
 
 - 原来C#主要是在Windows上面运行
-- 现在可以在所有的平台上运行 (Windows, Mac,
-  Linux,
-  iOS,
-  Android
-  …)
+- 现在可以在所有的平台上运行 (Windows, Mac, Linux, iOS, Android …)
 - .NET Core
 
 ### CLR
