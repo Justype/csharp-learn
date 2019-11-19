@@ -22,9 +22,10 @@
 - 随着函数的进入和退出，Stack也会随之增大和缩小
 
 ```c#
-static int Factorial(int x)
-{
-    if(x == 0) return 1;
+static int Factorial(int x)     // 这是一个递归函数，会调用自身
+{                               // 每运行一次，会在栈内存中开辟一个 变量x的存储空间
+    if(x < 0) return -1;        // 直到当前函数运行完成
+    else if(x == 0) return 1;
     return x * Factorial(x-1);
 }
 ```
