@@ -128,21 +128,99 @@ public class Wine
 
 ### 非public的构造函数
 
-构造函数可以不是public的
+- 构造函数可以不是public的
+- 静态方法调用非public构造函数，实现单例
+
+```c#
+public class Wine
+{
+    Wine() { }
+
+    public static Wine CreateInstance()
+    {
+        return new Wine();
+    }
+}
+```
 
 ### Deconstructor（C#7）解构函数？
 
-- C#7 引入了deconstructor 模式
+- C#7 引入了*de*constructor 模式
 - 作用基本和构造函数相反，它会把字段反赋给一堆变量
 - 方法名必须是Deconstruct， 有一个或多个out参数
 - Deconstructor可以被重载
 - Deconstruct这个方法可以是扩展方法
 
+```c#
+class Program
+{
+    static void Main(string[] args)
+    {
+        Rectangle rect = new Rectangle(3, 4);
+        (float width, float height) = rect;  // Deconstruction
+        // 相当于
+        // rect.Deconstruct(out float width, out float height);
+        Console.WriteLine($"width = {width}, height = {height}");
+    }
+}
+
+class Rectangle
+{
+    public readonly float Width, Height;
+    public Rectangle(float Width, float Height)
+    {
+        this.Width = Width;
+        this.Height = Height;
+    }
+    public void Deconstruct(out float Width, out float Height)
+    {
+        Width = this.Width;
+        Height = this.Height;
+    }
+}
+```
+
+```c#
+// 扩展方法
+class Program
+{
+    static void Main(string[] args)
+    {
+        Rectangle rect = new Rectangle(3, 4);
+        // Extensions.Deconstruct(rect, out float width, out float height);
+        // rect.Deconstruct(out float width, out float height);
+        (float width, float height) = rect;
+        Console.WriteLine($"width = {width}, height = {height}");
+    }
+}
+
+public class Rectangle
+{
+    public readonly float Width, Height;
+    public Rectangle(float Width, float Height)
+    {
+        this.Width = Width;
+        this.Height = Height;
+    }
+}
+
+// 扩展类
+public static class Extensions
+{
+    public static void Deconstruct(this Rectangle rectangle, out float width, out float height)
+    {
+        width = rectangle.Width;
+        height = rectangle.Height;
+    }
+}
+```
 ## 对象初始化器
 
 对象任何可访问的字段/属性在构建之后，可通过对象初始化器直接为其进行设定值
 
 ```c#
+
+
 public class Bunny
 {
     public string Name;
@@ -457,7 +535,7 @@ class Test
   - System.Console
   - System.Math
 
-## Finalizer 终结器
+## Finalizer 终结器
 
 - Finalizer是class专有的一种方法
 - 在GC回收未引用对象的内存之前运行
@@ -540,6 +618,6 @@ partial class PaymentForm       // In hand-authored file
 int count = 123;
 string name = nameof(count);  // name is "count"
 
-string name2 = nameof(StringBuilder.Length);  // name2 is Length
+string name2 = nameof(StringBuilder.Length);  // name2 is "Length"
 ```
 
