@@ -4,7 +4,7 @@
 - 所有类型都可以向上转换为object。
 
 ```c#
-public class Stack
+public class Stack  // 后进先出
 {
     int position;
     object[] data = new object[10];
@@ -54,7 +54,7 @@ long x = (long)obj;     // InvalidCastException
 long x2 = (int)obj;     // OK 转成int32，再隐式转换成int64
 
 object obj2 = 3.5;
-int x3 = (int)(double)obj; // x3 = 3
+int x3 = (int)(double)obj2;     // x3 = 3
 ```
 
 ### 注意
@@ -77,6 +77,7 @@ int i = 3;
 object boxed = i;
 i = 5;
 Console.WriteLine(boxed);   // 3
+// 是复制的，不是引用
 ```
 
 ## 静态和运行时类型检查
@@ -87,7 +88,7 @@ Console.WriteLine(boxed);   // 3
 - 运行时检查之所以可行是因为：每个在heap上的对象内部都存储了一个类型token。这个token可以通过调用object的GetType()方法来获取
 
 ```c#
-int x = "5";        // 
+int x = "5";        // 编译时？报错
 
 object y = "5";
 int z = (int)y;     // Runtime error, downcast failed
@@ -108,6 +109,26 @@ int z = (int)y;     // Runtime error, downcast failed
 
 System.Type的属性有：类型的名称，Assembly，基类等等。
 
+```C#
+using System;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Point p = new Point();
+        Console.WriteLine(p.GetType().Name);            // Point
+        Console.WriteLine(typeof(Point).Name);          // Point
+        Console.WriteLine(p.GetType() == typeof(Point));// True
+        Console.WriteLine(p.x.GetType().Name);          // Int32
+        Console.WriteLine(p.y.GetType().Name);          // Int32
+    }
+}
+
+public class Point { public int x, y; }
+
+```
+
 ### .ToString()
 
 - ToString()方法会返回一个类型实例的默认文本表示
@@ -119,7 +140,7 @@ string s = x.ToString();    // s is "1"
 ```
 
 - 可以在自定义的类型上重写ToString()方法
-- 如果你不重写该方法，那就会返回该类型的名称
+- 如果你不重写该方法，那就会返回该类型的名称(全名xxx.xxx.xxx)
 
 ```c#
 public class Panda

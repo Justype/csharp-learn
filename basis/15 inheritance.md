@@ -260,7 +260,7 @@ public class BaseClass
 }
 
 public class Overrider : BaseClass
-{
+{g
     public override void Foo() { Console.WriteLine("Override.Foo"); }
 }
 
@@ -307,6 +307,8 @@ public class House : Asset
 - 子类必须声明自己的构造函数
 - 从子类可访问父类的构造函数，但不是自动继承的
 - 子类必须重新定义它想要暴露的构造函数
+
+子类必须重写构造函数，可以调用父类的构造函数。
 
 ```c#
 public class BaseClass
@@ -395,6 +397,16 @@ public class D : B
     }
 }
 ```
+
+总结来看就是
+
+1. 子类成员初始化
+2. 调用父类
+3. 父类成员初始化
+4. 父类构造函数
+5. 子类构造函数
+
+个人总结，也许正确
 
 ### 重载和解析
 
