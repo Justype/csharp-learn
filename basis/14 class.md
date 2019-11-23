@@ -214,13 +214,12 @@ public static class Extensions
     }
 }
 ```
+
 ## 对象初始化器
 
-对象任何可访问的字段/属性在构建之后，可通过对象初始化器直接为其进行设定值
+对象任何**可访问**的字段/属性在构建之后，可通过对象初始化器直接为其进行设定值
 
 ```c#
-
-
 public class Bunny
 {
     public string Name;
@@ -237,12 +236,12 @@ static void Main(string[] args)
 }
 ```
 
-### 编译器生成的代码
+### 编译器生成的代码
 
 临时变量可以保证：如果在初始化的过程中出现了异常，那么不会以一个初始化到一半的对象来结尾。
 
 ```c#
-Bunny temp1 = new Bunny();
+Bunny temp1 = new Bunny();  // 使用临时变量
 temp1.Name = "Bo";
 temp1.LikesCarrots = true;
 temp1.LikesHumans = false;
@@ -260,6 +259,8 @@ Bunny b2 = temp2;
 - 优点：可以让Bunny类的字段/属性只读
 - 缺点：每个可选参数的值都被嵌入到了calling site，C#会把构造函数的调用翻译成：
   - `Bunny b1 = new Bunny ("bo", true, false);`
+  - 从另一个程序集实例化Bunny类，再为Bunny添加一个可选参数（共4个），除非程序集被编译，仍会调用三个可选参数的构造函数，报错。
+  - 如果改变可选参数的值，除非程序集被编译，其它程序集仍会调用原来参数的构造函数。
 
 ### this 引用
 
@@ -333,7 +334,7 @@ public class Stock
 #### get 和 set的访问性
 
 - get和set访问器可以拥有不同的访问级别
-- 典型用法：public get，internal/private set
+- 典型用法：`public get`，`internal/private set`
 - 注意，属性的访问级别更“宽松”一些，访问器的访问级别更“严”一些
 
 ```c#
@@ -350,7 +351,7 @@ public class Foo
 
 ### 属性与字段的区别
 
-尽管属性的访问方式与字段的访问方式相同，但不同之处在于，属性赋予了实现者对获取和赋值的完全控制权。这种控制允许实现者选择任意所需的内部表示，不向属性的使用者公开其内部实现细节。
+尽管属性的访问方式与字段的访问方式相同，但不同之处在于，**属性赋予了实现者对获取和赋值的完全控制权**。这种控制允许实现者选择任意所需的内部表示，不向属性的使用者公开其内部实现细节。
 
 #### 只读和计算的属性
 
@@ -471,8 +472,8 @@ public void set_Item (int wordNum, string value) { }
 - 一个值不可以改变的静态字段
 - 在编译时值就已经定下来了
 - 任何使用常量的地方，编译器都会把这个常量替换为它的值
-- 常量的类型可以是内置的数值类型、bool、char、string或enum
-- 使用const关键字声明，声明的同时必须使用具体的值来对其初始化
+- 常量的类型可以是内置的数值类型、`bool`、`char`、`string`或`enum`
+- 使用`const`关键字声明，声明的同时必须使用具体的值来对其初始化
 
 ```c#
 public class Test
@@ -524,8 +525,23 @@ class Test
 ### 初始化顺序
 
 - 静态字段的初始化器在静态构造函数被调用之前的一瞬间运行
-- 如果类型没有静态构造函数，那么静态字段初始化器在类型被使用之前的一瞬间执行，或者更早，在运行时突发奇想的时候执行
+- 如果类型没有静态构造函数，那么静态字段初始化器在类型被使用之前的一瞬间执行，或者更早
 - 静态字段的初始化顺序与它们的声明顺序一致
+
+```c#
+class Program
+{
+    static void Main() { Console.WriteLine($"Foo.X = {Foo.X}"); }  // 3
+}
+
+class Foo
+{
+    public static Foo Instance = new Foo();
+    public static int X = 3;
+
+    Foo() { Console.WriteLine($"Foo() {X}"); } // 0
+}
+```
 
 #### 静态类
 
@@ -535,7 +551,7 @@ class Test
   - System.Console
   - System.Math
 
-## Finalizer 终结器
+## Finalizer 析构函数？
 
 - Finalizer是class专有的一种方法
 - 在GC回收未引用对象的内存之前运行
@@ -556,7 +572,7 @@ protected override void Finalize() { base.Finalize(); }
 
 ## Partial 局部xx
 
-### Partial Type局部类型
+### Partial Type 局部类型
 
 - 允许一个类型的定义分布在多个地方（文件）
 - 典型应用：一个类的一部分是自动生成的，另一部分需要手动写代码
@@ -601,15 +617,13 @@ partial class PaymentForm       // In hand-authored file
 }
 ```
 
-
-
 - partial method由两部分组成：定义 和 实现。
 - 定义部分 通常是生成的
 - 实现部分 通常是手动编写的
 - 如果partial method只有定义，没有实现，那么编译的时候该方法定义就没有了，调用该方法的代码也没有了。这就允许自动生成的代码可以自由的提供钩子，不用担心代码膨胀
 - partial method必须是void，并且隐式private的
 
-## nameof
+## nameof C# 6
 
 - nameof 操作符会返回任何符号（类型、成员、变量…）的名字（string）
 - 利于重构
