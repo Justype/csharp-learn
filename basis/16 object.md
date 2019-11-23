@@ -93,7 +93,9 @@ object y = "5";
 int z = (int)y;     // Runtime error, downcast failed
 ```
 
-## GetType &typeof
+# object 常用成员
+
+## GetType & typeof
 
 - 所有C#的类型在运行时都是以System.Type的实例来展现的
 - 两种方式可以获得System.Type对象：
@@ -108,4 +110,56 @@ System.Type的属性有：类型的名称，Assembly，基类等等。
 
 ### .ToString()
 
+- ToString()方法会返回一个类型实例的默认文本表示
+- 所有的内置类型都重写了该方法
 
+```c#
+int x = 1;
+string s = x.ToString();    // s is "1"
+```
+
+- 可以在自定义的类型上重写ToString()方法
+- 如果你不重写该方法，那就会返回该类型的名称
+
+```c#
+public class Panda
+{
+    public string Name;
+    public override string ToString() => Name;
+}
+
+Panda p = new Panda{ Name = "Petey"; }
+Console.WriteLine(p);   // Petey
+```
+
+- 当你调用一个被重写的object成员的时候，例如在值类型上直接调用ToString()方法，这时候就不会发生装箱操作
+- 但是如果你进行了转换，那么装箱操作就会发生
+
+```c#
+int x = 1;
+string s1 = x.ToString();   // Calling on nonboxed value
+object box = x;
+string s2 = box.ToString(); // Calling on boxed value
+```
+
+## object 成员列表
+
+```c#
+public class Object
+{
+    public Object();
+
+    public extern Type GetType();
+
+    public virtual bool Equals(object obj);
+    public static bool Equals(object objA, object objB);
+    public static bool ReferenceEquals(object objA, object objB);
+    
+    public virtual int GetHashCode();
+
+    public virtual string ToString();
+
+    protected virtual void Finalize();
+    protected extern object MemberwiseClone();
+}
+```
