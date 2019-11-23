@@ -635,3 +635,55 @@ string name = nameof(count);  // name is "count"
 string name2 = nameof(StringBuilder.Length);  // name2 is "Length"
 ```
 
+## 5个访问修饰符
+
+- public，完全可访问。enum和interface的成员默认都是这个级别
+- internal，当前assembly或朋友assembly可访问，非嵌套类型的默认访问级别
+- private，本类可访问。class和struct的成员的默认访问级别。
+- protected，本类或其子类可以访问。
+- protected internal，联合了protected和internal的访问级别。
+
+### 例子
+
+```c#
+class Class1 { }        // Class1 is internal (default)
+public class Class2 { }
+
+class ClassA { int x; } // x is private (dafault)
+class ClassB { internal int x; }
+
+class BaseClass
+{
+  void Foo() { }       // Foo is private (default)
+  protected void Bar() { }
+}
+class SubClass : BaseClass
+{
+  void Test1() { Foo(); } // Error - cannot access Foo
+  void Test2() { Bar(); } // OK
+}
+```
+
+### 朋友assembly
+
+- 通过添加System.Runtime.CompilerServices.InternalsVisibleTo 这个Assembly的属性，并指定朋友Assembly的名字，就可以把internal的成员暴露给朋友Assembly。
+- `[assembly: InternalsVisibleTo ("Friend")]`
+- 如果朋友Assembly有Strong name，那么就必须指定其完整的160字节的public key。
+- `[assembly: InternalsVisibleTo ("StrongFriend, PublicKey=0024f000048c...")]`
+
+### 类型限制成员的访问级别会
+
+```c#
+class C { public void Foo() { } }
+```
+
+### 访问修饰符的限制
+
+- 当重写父类的函数时，重写后的函数和被重写的函数的访问级别必须一致
+- 有一个例外：当在其它Assembly重写protected internal的方法时，重写后的方法必须是protected。
+
+```c#
+class BaseClass             { protected virtual  void Foo() { } }
+class SubClass1 : BaseClass { protected override void Foo() { } } // OK
+class SubClass2 : BaseClass { public    override void Foo() { } } // Error
+```
