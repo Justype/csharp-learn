@@ -687,3 +687,45 @@ class BaseClass             { protected virtual  void Foo() { } }
 class SubClass1 : BaseClass { protected override void Foo() { } } // OK
 class SubClass2 : BaseClass { public    override void Foo() { } } // Error
 ```
+
+## 嵌套类型
+
+嵌套类型就是声明在另一个类型作用范围内的类型
+
+```c#
+public class TopLevel
+{
+    public class Nested { }               // Nested class
+    public enum Color { Red, Blue, Tan }  // Nested enum
+}
+```
+
+### 嵌套类型的特性
+
+- 可访问封闭类型的私有成员，以及任何封闭类型能访问的东西
+- 可以使用所有的访问修饰符来声明，不仅仅是public和internal
+- 嵌套类型的默认访问级别是private而不是internal
+- 从封闭类型外边访问嵌套类型需要使用到封闭类型的名称
+
+### 嵌套类型调用例子
+
+```c#
+public class TopLevel
+{
+    static int x;
+    public class Nested
+    {
+        static void Foo() { Console.WriteLine(TopLevel.x); }
+    }
+}
+
+public class SubTopLevel : TopLevel
+{
+    static void Foo() { new TopLevel.Nested(); }
+}
+
+class Test
+{
+  TopLevel.Nested n = new TopLevel.Nested();
+}
+```
