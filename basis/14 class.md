@@ -675,6 +675,7 @@ class SubClass : BaseClass
 
 ```c#
 class C { public void Foo() { } }
+// Foo() 的访问级别不会超过 class C
 ```
 
 ### 访问修饰符的限制

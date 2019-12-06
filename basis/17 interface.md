@@ -18,7 +18,7 @@ public interface IEnumerator
 ### 接口的实现
 
 - 接口的成员都是隐式public的，不可以声明访问修饰符
-- 实现接口对它的所有成员进行public的实现：
+- 实现接口对它的所有成员进行**public**的实现：
 
 ```c#
 internal class Countdown : IEnumerator
@@ -41,6 +41,24 @@ while(e.MoveNext())
 ```
 
 虽然Countdown是一个internal的class，但是可以通过把它的实例转化成IEnumerator接口来公共的访问它的成员。
+
+```c#
+public interface IFoo { void Do(); }
+public class Parent : IFoo
+{
+    // void IFoo.Do() => Console.WriteLine("P");
+    public void Do() => Console.WriteLine("P");
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        IFoo f = new Parent();
+        f.Do();     // P
+    }
+}
+```
 
 ### 接口的扩展
 
@@ -66,7 +84,7 @@ public class Widget : I1, I2
     {
         Console.WriteLine("Widget's implementation of I1.Foo");
     }
-    int I2.Foo()
+    int I2.Foo()    // 显式的接口实现
     {
         Console.WriteLine("Widget's implementation of I2.Foo");
         return 42;
@@ -79,11 +97,53 @@ public class Widget : I1, I2
 ```c#
 Widget w = new Widget();
 w.Foo();        // Widget's implementation of I1.Foo
+                // I1的实现为 public，I2的实现不是public
 ((I1)w).Foo();  // Widget's implementation of I1.Foo
 ((I2)w).Foo();  //Widget's implementation of I2.Foo
 ```
 
 另一个显式实现接口成员的理由是故意隐藏那些对于类型来说不常用的成员。
+
+```c#
+public interface IFoo { void Do(); }
+public class Parent : IFoo { public void Do() => Console.WriteLine("Parent"); }
+public class Child : Parent { public void Do() => Console.WriteLine("Child"); }
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Child c = new Child();
+        c.Do();             // Child
+        ((Parent)c).Do();   // Parent
+        ((IFoo)c).Do();     // Parent
+        // Parent类 是对 IFoo接口的直接实现
+    }
+}
+```
+
+如果签名和返回值完全一样，可以只实现一次：
+
+```c#
+public interface IFoo { void Foo(); }
+public interface IBar { void Foo(); }
+public class Parent : IFoo, IBar
+{
+    public void Foo() => Console.WriteLine("Parent");
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Parent p = new Parent();
+        IFoo f = p;
+        IBar b = p;
+        f.Foo();        // Parent
+        b.Foo();        // Parent
+    }
+}
+```
 
 ## virtual的实现接口成员
 
@@ -118,6 +178,29 @@ r.Undo();               // RichTextBox.Undo
 
 - 子类可以重新实现父类已经实现的接口成员
 - 重新实现会“劫持”成员的实现（通过转化为接口然后调用），无论在基类中该成员是否是virtual的。无论该成员是显式的还是隐式的实现（但最好还是显式实现的）。
+
+```c#
+public interface IFoo { void Do(); }
+public class Parent : IFoo
+{
+    void IFoo.Do() => Console.WriteLine("P");
+}
+public class Child : Parent, IFoo
+{
+    public void Do() => Console.WriteLine("C");
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Child c = new Child();
+        c.Do();
+        ((IFoo)c).Do();
+        // 子类直接实现了 IFoo接口
+    }
+}
+```
 
 ```c#
 public interface IUndoable { void Undo(); }
@@ -182,6 +265,7 @@ public class TextBox : IUndoable
 }
 public class RichTextBox : TextBox， IUndoable
 {
+    // 重写了Undo 也就重写了接口的Undo
     public override void Undo() => Console.WriteLine("RichTextBox.Undo");
 }
 ```
