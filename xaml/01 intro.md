@@ -85,3 +85,17 @@ myButton.Click += ClickMeButton_Click;
 ```
 
 由于`GradientStopCollection`只能存放`GradientStop`，所以这个就省略掉了，由编译器自动生成。`LinearGradientBrush.GradientStops` 同理。
+
+## schema
+
+也就是XAML要遵循的条款：
+
+- xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"      // UI Elements
+- xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"                 // General Rules
+- xmlns:local="using:SDKTemplate"                                        // using namespace
+- xmlns:d="http://schemas.microsoft.com/expression/blend/2008"           // designer
+- xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" // designer
+
+而后面对象中 `x:Name` 的`x`就是第二个 `xmlns:x` ？？
+
+
