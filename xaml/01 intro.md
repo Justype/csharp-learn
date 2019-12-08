@@ -1,5 +1,7 @@
 # XAML
 
+XAML - XML Syntax, create instances of Classes that define the UI
+
 - XAML是一种简单的，创建类实例的方法
 - XAML只是特定格式的XML，遵循XML的所有规定
 
@@ -35,6 +37,8 @@ myButton.Click += ClickMeButton_Click;
 ```
 
 ### 类型转换器 Type Converter
+
+Type Converters - Convert literal strings in XAML into enumerations, instances of classes, etc.
 
 如同上例所示：C#代码中`HorizontalAlignment`的值对应的是一个枚举类型。通过类型转换器，XAML能把`Left`，转换为`HorizontalAlignment.Left`
 
@@ -98,4 +102,10 @@ myButton.Click += ClickMeButton_Click;
 
 而后面对象中 `x:Name` 的`x`就是第二个 `xmlns:x` ？？
 
+Don't touch the schema stuff - it's necessary!
 
+Schemas define rules for XAML parser where to find the definition / fules for a given element in the XAML.
+
+## 布局 Layout
+
+Layout controls don't have a content proterty... They have a Chidren property of type UIElementCollection. By embedding any control inside of a layout control, you are implicitly calling the Add method of the Children collection property.
