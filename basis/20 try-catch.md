@@ -152,3 +152,129 @@ using(StreamReader reader = File.OpenText("file.txt")) { }
 }
 ```
 
+# throw 抛出异常
+
+异常可以被运行时或者用户抛出。
+
+```c#
+class Program
+{
+    static void Display(string name)
+    {
+        if (name == null)
+            throw new ArgumentNullException(nameof(name));
+        Console.WriteLine(name);
+    }
+    static void Main(string[] args)
+    {
+        try { Display(null); }
+        catch (ArgumentNullException ex)
+        {
+            System.Console.WriteLine("Caught the exception");
+        }
+    }
+}
+```
+
+## C#7 抛异常
+
+- C# 7 之前，throw 肯定是个语句。而现在它可以作为expression-bodied functions 里的一个表达式：
+    - `public string Foo() => throw new NotImplementedException();`
+- 也可以出现在三元条件表达式里：
+
+```c#
+string ProperCase(string value) =>
+    value == null ? throw new ArgumentException("value") :
+    value == "" ? "" :
+    char.ToUpper(value[0]) + value.Substring(1);
+```
+
+## 重新抛出异常
+
+```c#
+try { }
+catch {Exception ex}
+{
+    // Log error
+
+    throw;  // Rethrow same exception
+}
+```
+
+如果使用throw ex代替throw的话，程序仍可运行，但是新传递的异常的Stacktrace属性就不会反应原始错误了。
+
+像上述这样重抛异常可以让你记录异常并且不会把它吞没，如果情况超出了你的预期，它允许你放弃在这里处理这个异常：
+
+```c#
+string s = null;
+using (WebClient wc = new WebClient())
+    try { s = wc.DownloadString("https://justype.github.io/"); }
+    catch(WebException ex)
+    {
+        if(ex.Status == WebExceptionStatus.Timeout)
+            System.Console.WriteLine("Timeout");
+            else
+            throw;  // can't handle other sorts of WebException, so rethrow
+}
+```
+
+使用C#6+，你可以这样简洁的重写上例：
+
+```c#
+catch(WebException ex) when (ex.Status == WebExceptionStatus.Timeout)
+{
+    System.Console.WriteLine("Timeout");
+}
+```
+
+其它常见的情景是抛出一个更具体的异常类型：
+
+```c#
+try
+{
+    // Parse a DateTime from XML element data
+}
+catch(FormatException ex)
+{
+    throw new XmlException("Invalid DateTime", ex);
+}
+```
+
+- 注意：在组建XmlException的时候，我把原异常ex，作为第二个参数传了进去，这样有助于调试。
+- 有时候你会抛出一个更抽象的异常，通常是因为要穿越信任边界，防止信息泄露。
+
+## System.Exception的关键属性
+
+- `StackTrace`：它是一个字符串，展现了从异常发生地到catch块所有的被调用的方法。
+- `Message`：关于错误的描述信息
+- `InnerException`：引起外层异常的内层异常（如果存在的话）。而且InnerException本身还有可能含有InnerException
+
+## 常见异常类型
+
+```c#
+System.ArgumentException 
+System.ArgumentNullException 
+System.ArgumentOutOfRangeException 
+System.InvalidOperationException 
+System.NotSupportedException 
+System.NotImplementedException 
+System.ObjectDisposedException 
+NullReferenceException 
+// 你也可以直接throw null，来抛出此类型的异常。
+```
+
+## TryXXX模式
+
+```c#
+public int  Parse   (string input);
+public bool TryParse(string input, out int returnValue);
+
+// 如果解析失败，Parse方法会抛出异常，而TryParse方法会返回false。
+public return-type XXX(input-type input)
+{
+    return-type returnValue;
+    if(!TryXXX(input, out returnValue))
+        throw new YYYException(...);
+    return returnValue;
+}
+```
