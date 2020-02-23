@@ -1,6 +1,6 @@
 # Grid
 
-```xaml
+```xml
 <Grid>
     <Button><!-- myGrid.Children.Add(new Button()); -->
         <TextBlock>Hi</TextBlock>
@@ -15,7 +15,7 @@
 - RowDefinitions
 - ColumnDefinitions
 
-```xaml
+```xml
 <Grid>
     <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
@@ -32,7 +32,7 @@
 - `Auto`: 与行内控件相关
 - `*`:占据剩余可用的高度，按比例分配
 
-```xaml
+```xml
 <Grid.RowDefinitions>
     <RowDefinition Height="1*" />
     <RowDefinition Height="2*" />
@@ -64,7 +64,7 @@ Alignment决定的是margin作用的边：
 
 ## 练习 UWP-11
 
-```xaml
+```xml
 <Page
     x:Class="UWP_11.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"

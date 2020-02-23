@@ -28,7 +28,7 @@ MySplitView.IsPaneOpen = !MySplitView.IsPaneOpen;
 
 MainPage.xaml
 
-```xaml
+```xml
 <StackPanel>
     <SplitView x:Name="MySplitView" CompactPaneLength="20" OpenPaneLength="50" DisplayMode="CompactOverlay">
         <SplitView.Pane>

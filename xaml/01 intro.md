@@ -7,7 +7,7 @@ XAML - XML Syntax, create instances of Classes that define the UI
 
 ## 例子
 
-```xaml
+```xml
 <!-- XAML -->
 <Button x:Name="myButton"
         Name="ClickMeButton"
@@ -44,7 +44,7 @@ Type Converters - Convert literal strings in XAML into enumerations, instances o
 
 ## XAML 语法
 
-```xaml
+```xml
 <Page xxx="XXX">
     <Grid yyy="YYY">
         <Button zzz="ZZZ"/>
@@ -63,7 +63,7 @@ Type Converters - Convert literal strings in XAML into enumerations, instances o
 
 `<Object.Property>`
 
-```xaml
+```xml
 <Button>
     <Button.Background> <!-- 这个就是 -->
         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">

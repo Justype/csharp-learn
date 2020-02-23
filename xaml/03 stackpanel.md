@@ -1,6 +1,6 @@
 # StackPanel
 
-```xaml
+```xml
 <StackPanel>
     <TextBlock>Top</TextBlock>
     <TextBlock>Bottom</TextBlock>
@@ -14,7 +14,7 @@
 
 ## 练习 UWP-13
 
-```xaml
+```xml
 <Page
     x:Class="UWP_13.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -52,7 +52,7 @@
 
 ## Grid+StackPanel 练习 UWP-15
 
-```xaml
+```xml
 <Page
     x:Class="UWP_15.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
