@@ -252,14 +252,14 @@ catch(FormatException ex)
 ## 常见异常类型
 
 ```c#
-System.ArgumentException 
-System.ArgumentNullException 
-System.ArgumentOutOfRangeException 
-System.InvalidOperationException 
-System.NotSupportedException 
-System.NotImplementedException 
-System.ObjectDisposedException 
-NullReferenceException 
+System.ArgumentException
+System.ArgumentNullException
+System.ArgumentOutOfRangeException
+System.InvalidOperationException
+System.NotSupportedException
+System.NotImplementedException
+System.ObjectDisposedException
+NullReferenceException
 // 你也可以直接throw null，来抛出此类型的异常。
 ```
 
