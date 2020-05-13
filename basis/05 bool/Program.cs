@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bool
+namespace Type
 {
     class Program
     {
@@ -16,8 +16,8 @@ namespace Bool
             Console.WriteLine(p1 == p3);    // False
             Console.WriteLine(p1 == p4);    // True
 
-            Console.WriteLine(p1.name == p2.name);  // False
-            Console.WriteLine(p1.name == p3.name);  // True
+            Console.WriteLine(p1.Name == p2.Name);  // False
+            Console.WriteLine(p1.Name == p3.Name);  // True
 
             // 三元运算符
             Console.WriteLine("三元运算符");
@@ -26,6 +26,16 @@ namespace Bool
 
             int z = x > y ? x : y;
             Console.WriteLine(z);   // 3
+        }
+    }
+    class Person
+    {
+        public string Name;
+        public int Age;
+        public Person(string name, int age)
+        {
+            Name = name;
+            Age = age;
         }
     }
 }
