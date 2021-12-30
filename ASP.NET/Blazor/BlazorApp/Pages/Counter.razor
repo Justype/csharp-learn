@@ -1,0 +1,27 @@
+﻿@page "/counter" 
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+@*
+每次点击时触发 onclick 事件 
+调用 IncrementCount 方法
+currentCount 增加
+更新计数
+*@
+
+@code {
+    private int currentCount = 10;
+
+    [Parameter] // 将其设置为属性后，就可以在使用该组件时传入
+    public int IncrementAmount { get; set; } = 1;
+
+    private void IncrementCount()
+    {
+        currentCount += IncrementAmount;
+    }
+}
