@@ -1,3 +1,27 @@
+# Blazor
+
+Blazor 就是一个写Web应用的引擎，可以使用C#代替JS。
+
+我主要看中了Blazor Desktop才来学习的，主要是MAUI不知道好不好，但Web跨平台是一定可行的。
+
+## Razor
+
+类似HTML，有`.cshtml`和`.razor`两种类型，使用`HTML`和`C#`编写页面
+
+## Pages & Components
+
+Page 就是展示整个页面，里面可以包含多个组件
+
+Component 组件，可以反复利用的，一般用组件
+
+## Blazor Server or WebAssembly
+
+Server：使用SignalR与服务器进行连接，更新页面在服务器上完成，文件下载量小，加载快
+
+WebAssembly：与Angular和Vue相似，下载好代码后本地更新，下载文件很大（有C#垃圾回收器）
+
+[详细对比](https://docs.microsoft.com/learn/modules/blazor-introduction/3-when-to-use-blazor)
+
 # First Blazor App
 
 ## Create
@@ -134,4 +158,38 @@ This is my first Blazor App.
 
 <Counter IncrementAmount="10"/> <!-- 这里传入了参数 -->
 ```
+
+## DataBinding & Event
+
+### 代码隐藏 code-behind
+
+在 Blazor 中，可以将 C# 文件直接添加到应用项目，就像其他 .NET 项目一样。 此方法通常称为“代码隐藏”，它使用单独的代码文件来存储应用逻辑。 当业务逻辑较复杂、较长或有多个类时，单独的文件是一个非常好的策略。
+
+对于简单的逻辑，并不总是需要新建 `.cs` 文件。
+
+### 组件中的 C# 内联 (C# inline in components)
+
+常见做法是在一个 Razor 组件文件中混用 HTML 和 C#。 对于具有较轻代码要求的简单组件，此方法非常有效。 可使用指令将代码添加到 Razor 文件。
+
+### Razor 指令 (directives)
+
+Razor 指令是用于使用 HTML 添加 C# 内联的组件标记。 使用指令，开发人员可以定义单个语句、方法或更大的代码块。
+
+### 代码指令
+
+可使用 @expression() 来添加一个与 HTML 内联的 C# 语句。 如果需要更多代码，请使用 @code 指令添加多个语句（用括号括起来）。
+
+还可将 @functions 部分添加到方法和属性的模板。 它们将添加到生成的类顶部，文档可在其中引用它们。
+
+### Page 指令
+
+@Page 指令是用于将组件标识为页面的特殊标记。 可使用此指令指定路由。 该路由映射到 Blazor 引擎识别的属性路由，以注册和访问页面。
+
+### Razor 数据绑定
+
+在 Razor 组件中，可以将 HTML 元素数据绑定到 C# 字段、属性和 Razor 表达式值。 数据绑定支持在 HTML 和 Microsoft .NET 之间进行双向同步。
+
+呈现组件时，数据从 HTML 推送到 .NET。 组件在事件处理程序代码执行后呈现自身。 因此在触发事件处理程序后，属性更新会立即反映在 UI 中。
+
+使用 @bind 标记将 C# 变量绑定到 HTML 对象。 按名称将 C# 变量定义为 HTML 中的字符串。
 
